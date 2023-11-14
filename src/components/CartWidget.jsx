@@ -19,7 +19,7 @@ export const CartWidget = () => {
   return (
     <div className="cart-widget">
       <div className="cart-icon" onClick={() => setIsCartOpen(!isCartOpen)}>
-        <img src="../src/assets/cart-logo.png" alt="Cart" width="24px" />
+        <img src="https://raw.githubusercontent.com/julian-lr/Preentrega2-LauritoRiscica/main/src/assets/cart-logo.png" alt="Cart" width="24px" />
         <span className="currency-count">{cart.length}</span>
       </div>
       {isCartOpen && (

@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom"
-
 import currencies from "../data/currencies.json"
 
 export const Currencies = () => {
@@ -10,9 +9,9 @@ export const Currencies = () => {
 	return (
 		<ul>
 			{currencies.map(currency => (
-				<li key={currency.id}>
+				<li key={currency.category}>
 					{currency.name}
-					<Link to={`/currencies/${currency.id}`}>
+					<Link to={`/currencies/${currency.category}`}>
 						<button>Comprar</button>
 					</Link>
 				</li>

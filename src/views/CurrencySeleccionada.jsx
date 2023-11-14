@@ -50,19 +50,21 @@ export const CurrencySeleccionada = () => {
       <h1>Detalle de la divisa:</h1>
       <h2>{currency.type}</h2>
       <img width={300} src={currency.img} alt={currency.type} />
-      <p>{currency.description}</p>
+      <p>- Actualmente cotiza ${currency.valueInARS}</p>
+      <p>- Plazo de entrega: {currency.delivery}</p>
+      <p>- {currency.description}</p>
 
-      <div>
+      <div className="adjust-amount-buttons">
         {[5, 10, 50, 100, 1000].map((amount) => (
           <div key={amount} className="amount-button-container">
             <button
-              className="amount-button"
+              className="amount-button sign-item sign-minus"
               onClick={() => handleDecrement(amount)}
             >
               -
             </button>
             <button
-              className={`amount-button ${
+              className={`amount-button value-item ${
                 currentAmount === amount ? "selected" : ""
               }`}
               onClick={() => handleAmountButtonClick(amount)}
@@ -70,7 +72,7 @@ export const CurrencySeleccionada = () => {
               {amount}
             </button>
             <button
-              className="amount-button"
+              className="amount-button sign-item sign-plus"
               onClick={() => handleIncrement(amount)}
             >
               +
@@ -78,15 +80,18 @@ export const CurrencySeleccionada = () => {
           </div>
         ))}
       </div>
-
-      <label htmlFor="currentAmount">Amount to Buy:</label>
+              <div className="amount-to-buy">
+      <label htmlFor="currentAmount">Cantidad a comprar: </label>
       <input
         type="text"
         id="currentAmount"
         value={currentAmount}
         readOnly
       />
-      <button onClick={handleBuyButtonClick}>Buy</button>
+      </div>
+      <div className="buy-button">
+      <button onClick={handleBuyButtonClick}>Comprar</button>
+      </div>
     </main>
   );
 };

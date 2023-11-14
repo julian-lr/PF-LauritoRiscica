@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Home } from "./views/Home"
 import { NavBar } from "./components/NavBar"
 import { CurrencySeleccionada } from "./views/CurrencySeleccionada"
+import { Currencies } from "./views/Currencies"
 
 import "./App.css"
+
 
 function App() {
 	return (
@@ -12,7 +14,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/currencies/:id" element={<CurrencySeleccionada />} />
-				<Route path="/currencies/:categoryId" element={<Home />} />
+				<Route path="/currencies/:categoryId" element={<Currencies />} />
 			</Routes>
 		</BrowserRouter>
 	)

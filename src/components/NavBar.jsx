@@ -16,7 +16,7 @@ export const NavBar = () => (
     <div className="container nav-container">
       <Navbar.Brand to="/">
         <img
-          src="../src/assets/react.svg"
+          src="https://raw.githubusercontent.com/julian-lr/Preentrega2-LauritoRiscica/6ad8fe67f181eb05681752215e0d8ea675b2ba75/src/assets/react.svg"
           className="logo"
           alt="Logo del proyecto"
         />
@@ -26,7 +26,7 @@ export const NavBar = () => (
       </Navbar.Brand>
         <Nav className="me-auto">
           <NavLink to="/">
-            <span className="nav-link">Home</span>
+            <span className="nav-link">Inicio</span>
           </NavLink>
           {[...uniqueCurrencies].map((category) => (
             <NavLink key={category} to={`/currencies/${category}`}>
