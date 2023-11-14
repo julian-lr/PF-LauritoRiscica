@@ -14,15 +14,15 @@ const uniqueCurrencies = new Set(currencies);
 export const NavBar = () => (
   <Navbar bg="dark" data-bs-theme="dark">
     <div className="container nav-container">
-      <Navbar.Brand>
+      <Navbar.Brand to="/">
         <img
-          src="./src/assets/react.svg"
+          src="../src/assets/react.svg"
           className="logo"
           alt="Logo del proyecto"
         />
         <NavLink to="/">
           <span className="nav-link brand-title">La Cueva del React</span>
-        </NavLink>{" "}
+        </NavLink>
       </Navbar.Brand>
         <Nav className="me-auto">
           <NavLink to="/">

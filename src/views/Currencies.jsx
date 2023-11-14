@@ -13,7 +13,7 @@ export const Currencies = () => {
 				<li key={currency.id}>
 					{currency.name}
 					<Link to={`/currencies/${currency.id}`}>
-						<button>Ver más</button>
+						<button>Comprar</button>
 					</Link>
 				</li>
 			))}
