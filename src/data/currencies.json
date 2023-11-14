@@ -1,0 +1,123 @@
+[
+    {
+      "type": "Dólares blue",
+      "valueInARS": 1074.32,
+      "delivery": "24 a 48 hs",
+      "description": "Se entrega en tu estación de servicio más cercana.",
+      "img": "https://i.imgur.com/WNXLQH1.png",
+      "location": "En persona",
+      "id": 1,
+      "category": "Dólares"
+    },
+    {
+      "type": "Euros blue",
+      "valueInARS": 1391.11,
+      "delivery": "72 a 96 hs",
+      "description": "Se entrega en tu consulado europeo más cercano.",
+      "img": "https://i.imgur.com/Gmwi9aQ.png",
+      "location": "En persona",
+      "id": 2,
+      "category": "Euros"
+    },
+    {
+      "type": "Yuanes blue",
+      "valueInARS": 780.56,
+      "delivery": "3 a 6 hs",
+      "description": "Se entrega en tu ArgenChino más cercano*.",
+      "img": "https://i.imgur.com/aDaTZQe.png",
+      "location": "En persona",
+      "id": 3,
+      "category": "Yuanes"
+    },
+    {
+      "type": "Dólares MEP",
+      "valueInARS": 1179.36,
+      "delivery": "1 a 3 hs",
+      "description": "Se transfiere a tu cuenta bancaria preferida.",
+      "img": "https://i.imgur.com/WNXLQH1.png",
+      "location": "Cuenta de banco",
+      "id": 4,
+      "category": "Dólares"
+    },
+    {
+      "type": "Euros MEP",
+      "valueInARS": 1561.83,
+      "delivery": "12 a 24 hs",
+      "description": "Se transfiere a tu cuenta bancaria en el exterior.",
+      "img": "https://i.imgur.com/Gmwi9aQ.png",
+      "location": "Cuenta de banco",
+      "id": 5,
+      "category": "Euros"
+    },
+    {
+      "type": "Yuanes MEP",
+      "valueInARS": 873.68,
+      "delivery": "1 a 3 hs",
+      "description": "Se deposita en una giftcard en tu chino afiliado más cercano.",
+      "img": "https://i.imgur.com/aDaTZQe.png",
+      "location": "Tarjeta de socio",
+      "id": 6,
+      "category": "Yuanes"
+    },
+    {
+      "type": "Dólares CCL",
+      "valueInARS": 1322.75,
+      "delivery": "1 a 3 hs",
+      "description": "Se acredita en tu cuenta comitente de tu agente de preferencia.",
+      "img": "https://i.imgur.com/WNXLQH1.png",
+      "location": "Agente",
+      "id": 7,
+      "category": "Dólares"
+    },
+    {
+      "type": "Euros CCL",
+      "valueInARS": 1751.44,
+      "delivery": "3 a 12 hs",
+      "description": "Se acredita en tu cuenta comitente en el exterior.",
+      "img": "https://i.imgur.com/Gmwi9aQ.png",
+      "location": "Agente",
+      "id": 8,
+      "category": "Euros"
+    },
+    {
+      "type": "Yuanes CCL",
+      "valueInARS": 980.63,
+      "delivery": "10 a 15 min",
+      "description": "Se transfiere a tu tarjeta de socio en tu chino afiliado más cercano.",
+      "img": "https://i.imgur.com/aDaTZQe.png",
+      "location": "Tarjeta de socio",
+      "id": 9,
+      "category": "Yuanes"
+    },
+    {
+      "type": "Dólares crypto",
+      "valueInARS": 920.17,
+      "delivery": "15 a 30 min",
+      "description": "Se transfiere a tu wallet de preferencia.",
+      "img": "https://i.imgur.com/WNXLQH1.png",
+      "location": "Wallet digital",
+      "id": 10,
+      "category": "Dólares"
+    },
+    {
+      "type": "Euros crypto",
+      "valueInARS": 1190.52,
+      "delivery": "15 a 30 min",
+      "description": "Se transfiere a tu wallet de preferencia.",
+      "img": "https://i.imgur.com/Gmwi9aQ.png",
+      "location": "Wallet digital",
+      "id": 11,
+      "category": "Euros"
+    },
+    {
+      "type": "Yuanes crypto",
+      "valueInARS": 667.0,
+      "delivery": "15 a 30 min",
+      "description": "Se transfiere a tu wallet digital del Banco Central de China.",
+      "img": "https://i.imgur.com/aDaTZQe.png",
+      "location": "Wallet digital",
+      "id": 12,
+      "category": "Yuanes"
+    }
+  ]
+  
