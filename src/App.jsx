@@ -14,7 +14,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/currencies/:id" element={<CurrencySeleccionada />} />
-				<Route path="/currencies/:categoryId" element={<Currencies />} />
+				<Route path="/currencies/category/:categoryId" element={<Currencies />} />
 			</Routes>
 		</BrowserRouter>
 	)

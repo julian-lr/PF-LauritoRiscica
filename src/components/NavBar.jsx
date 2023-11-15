@@ -7,19 +7,21 @@ import "../App.css";
 
 import data from "../data/currencies.json";
 
-const currencies = data.map((item) => item.category);
+const currencies = data.map((currency) => currency.category);
 
 const uniqueCurrencies = new Set(currencies);
 
 export const NavBar = () => (
   <Navbar bg="dark" data-bs-theme="dark">
     <div className="container nav-container">
-      <Navbar.Brand to="/">
+      <Navbar.Brand>
+      <NavLink to="/">
         <img
           src="https://raw.githubusercontent.com/julian-lr/Preentrega2-LauritoRiscica/6ad8fe67f181eb05681752215e0d8ea675b2ba75/src/assets/react.svg"
           className="logo"
           alt="Logo del proyecto"
         />
+        </NavLink>
         <NavLink to="/">
           <span className="nav-link brand-title">La Cueva del React</span>
         </NavLink>
@@ -29,7 +31,7 @@ export const NavBar = () => (
             <span className="nav-link">Inicio</span>
           </NavLink>
           {[...uniqueCurrencies].map((category) => (
-            <NavLink key={category} to={`/currencies/${category}`}>
+            <NavLink key={category} to={`/currencies/category/${category}`}>
               <span className="nav-link">{category}</span>
             </NavLink>
           ))}

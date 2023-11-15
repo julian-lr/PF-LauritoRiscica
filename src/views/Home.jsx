@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Container, Card, Button } from "react-bootstrap";
-import { CartWidget } from "../components/CartWidget";
 import data from "../data/currencies.json";
 
 export const Home = () => {
@@ -31,7 +30,7 @@ export const Home = () => {
   }, [currencyId]);
 
   const addToCart = (currencyId) => {
-    console.log(`Added currency with ID ${currencyId} to the cart`);
+    console.log(`currency ID ${currencyId} en el cart`);
   };
 
   return (
@@ -52,7 +51,6 @@ export const Home = () => {
           </Card>
         ))}
       </div>
-      <CartWidget cart={cart} addToCart={addToCart} />
     </Container>
   );
 };
