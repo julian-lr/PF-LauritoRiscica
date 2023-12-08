@@ -1,10 +1,12 @@
+// ItemDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 import currencies from "../data/currencies.json";
 
-export const CurrencySeleccionada = () => {
+export const ItemDetail = () => {
+  const { addToCart } = useCart();
   const [currency, setCurrency] = useState(null);
-  const [purchases, setPurchases] = useState([]);
   const [currentAmount, setCurrentAmount] = useState(5);
 
   const { id } = useParams();
@@ -35,25 +37,26 @@ export const CurrencySeleccionada = () => {
   const handleBuyButtonClick = () => {
     const newPurchase = {
       id: currency.id,
+      value: currency.valueInARS,
       amount: currentAmount,
       type: currency.type,
+      price: (currency.valueInARS * currentAmount).toFixed(2),
     };
 
-    setPurchases((prevPurchases) => [...prevPurchases, newPurchase]);
+    addToCart(newPurchase);
     setCurrentAmount(0);
-
-    console.table(purchases);
   };
 
   return (
     <main>
       <h1>Detalle de la divisa:</h1>
-      <h2>{currency.type}</h2>
-      <img width={300} src={currency.img} alt={currency.type} />
-      <p>- Actualmente cotiza ${currency.valueInARS}</p>
-      <p>- Plazo de entrega: {currency.delivery}</p>
-      <p>- {currency.description}</p>
-
+      <div className="info-card">
+        <h2>{currency.type}</h2>
+        <img width={150} src={currency.img} alt={currency.type} />
+        <p>Actualmente cotiza ${currency.valueInARS}</p>
+        <p>Plazo de entrega: {currency.delivery}</p>
+        <p>{currency.description}</p>
+      </div>
       <div className="adjust-amount-buttons">
         {[5, 10, 50, 100, 1000].map((amount) => (
           <div key={amount} className="amount-button-container">
@@ -80,17 +83,15 @@ export const CurrencySeleccionada = () => {
           </div>
         ))}
       </div>
-              <div className="amount-to-buy">
-      <label htmlFor="currentAmount">Cantidad a comprar: </label>
-      <input
-        type="text"
-        id="currentAmount"
-        value={currentAmount}
-        readOnly
-      />
+      <div className="amount-to-buy">
+        <label htmlFor="currentAmount">Cantidad a comprar: </label>
+        <input type="text" id="currentAmount" value={currentAmount} readOnly />
+        <span className="monto-a-pagar">
+          Estarías abonando: ${(currency.valueInARS * currentAmount).toFixed(2)}
+        </span>
       </div>
       <div className="buy-button">
-      <button onClick={handleBuyButtonClick}>Comprar</button>
+        <button onClick={handleBuyButtonClick}>Agregar al carrito</button>
       </div>
     </main>
   );

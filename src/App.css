@@ -45,6 +45,10 @@ div.card {
   border-radius: 15px;
 }
 
+.info-card {
+  text-align: center;
+}
+
 .sign-item {
   padding: 5px 10px;
   border-radius: 50%;
@@ -97,4 +101,51 @@ div.card {
 .navbar-nav span.nav-link {
   border-right: 1px solid white;
   padding: 0 10px;
+}
+
+.monto-a-pagar {
+  display: block;
+}
+
+.cart-popover {
+  background-color: #242424;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.popover-body {
+  width: 100%;
+}
+
+.cart-currency {
+  padding: 15px 10px;
+  margin: 0 -11px;
+  width: 100%;
+  border: 1px solid black;
+  
+}
+
+.cart-amount {
+  float:right;
+}
+
+.cart-total {
+  display: block;
+}
+
+.cart-buttons {
+  text-align: center;
+}
+
+.cart-buttons button {
+  margin: 0 5px;
+}
+
+.cart-actions {
+  margin-top: 15px;
+}
+
+.cart-actions button {
+  margin: 0 5px;
 }
