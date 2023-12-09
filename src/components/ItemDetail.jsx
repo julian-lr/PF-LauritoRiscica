@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 import { useParams } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import currencies from "../data/currencies.json";
 
 export const ItemDetail = () => {
-  const { addToCart } = useCart();
+  const { cart, addToCart } = useCart();
   const [currency, setCurrency] = useState(null);
   const [currentAmount, setCurrentAmount] = useState(5);
 
@@ -33,6 +34,15 @@ export const ItemDetail = () => {
   };
 
   const handleBuyButtonClick = () => {
+    if (currentAmount === 0) {
+      Swal.fire({
+        title: 'Cantidad inválida',
+        text: `No podés ordenar 0 ${currency.type}`,
+        icon: 'warning',
+      });
+      return;
+    }
+  
     const newPurchase = {
       id: currency.id,
       value: currency.valueInARS,
@@ -40,10 +50,32 @@ export const ItemDetail = () => {
       type: currency.type,
       price: (currency.valueInARS * currentAmount).toFixed(2),
     };
-
-    addToCart(newPurchase);
-    setCurrentAmount(0);
+  
+    const existingOrder = cart.find((order) => order.id === currency.id);
+  
+    if (existingOrder) {
+      Swal.fire({
+        title: `Ya tenés una orden de ${existingOrder.amount} ${(currency.type).toLowerCase()} en tu carrito.`,
+        text: 'Con esta orden estarías reemplazando la existente, querés avanzar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          addToCart(newPurchase);
+          setCurrentAmount(0);
+          Swal.fire('Orden reemplazada!', '', 'success');
+        }
+      });
+    } else {
+      addToCart(newPurchase);
+      setCurrentAmount(0);
+      Swal.fire('Orden añadida al carrito!', '', 'success');
+    }
   };
+  
+
 
   return (
     <main>

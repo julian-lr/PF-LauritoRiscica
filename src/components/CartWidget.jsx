@@ -1,18 +1,45 @@
 import React from "react";
 import { useCart } from "../contexts/CartContext";
 import { Badge, OverlayTrigger, Popover } from "react-bootstrap";
+import Swal from 'sweetalert2';
 import "../App.css";
 
 export const CartWidget = () => {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
-  const handleEdit = (index, updatedValue) => {
+  const handleEdit = (currencyId) => {
     // This function will be called when the "Edit" button is clicked
   };
 
+  const handleRemove = (currencyId) => {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar esta orden del carrito?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeFromCart(currencyId);
+        Swal.fire('Orden eliminada del carrito', '', 'success');
+      }
+    });
+  };
+
   const handleRemoveAll = () => {
-    clearCart();
-    };
+    Swal.fire({
+      title: '¿Estás seguro de vaciar tu carrito?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        clearCart();
+        Swal.fire('Carrito vaciado', '', 'success');
+      }
+    });
+  };
 
   const handleCheckout = () => {
     // This function will be called when the "Checkout" button is clicked
@@ -28,16 +55,16 @@ export const CartWidget = () => {
           <Popover.Body>
             {cart.length > 0 ? (
               <>
-                {cart.map((currency, index) => (
-                  <div key={index} className="cart-currency">
+                {cart.map((currency) => (
+                  <div key={currency.id} className="cart-currency">
                     <div className="cart-details">
                       <span className="cart-type">{currency.type}</span>
                       <span className="cart-amount">Cantidad: ${currency.amount}</span>
                       <span className="cart-total">Total a pagar: ${currency.price}</span>
                     </div>
                     <div className="cart-buttons">
-                      <button onClick={() => removeFromCart(index)}>Eliminar</button>
-                      <button onClick={() => handleEdit(index)}>
+                      <button onClick={() => handleRemove(currency.id)}>Eliminar</button>
+                      <button onClick={() => handleEdit(currency.id)}>
                         Editar
                       </button>
                     </div>
@@ -45,15 +72,15 @@ export const CartWidget = () => {
                 ))}
                 <div className="cart-actions">
                   <button onClick={handleRemoveAll} className="remove-all-btn">
-                    Remove All
+                    Vaciar Carrito
                   </button>
                   <button onClick={handleCheckout} className="checkout-btn">
                     Checkout
                   </button>
                 </div>
-              </>
+                </>
             ) : (
-              <p>Tu carrito esta vacío</p>
+              <p>Tu carrito está vacío</p>
             )}
           </Popover.Body>
         </Popover>

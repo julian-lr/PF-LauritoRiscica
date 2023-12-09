@@ -1,8 +1,5 @@
-# React + Vite
+# Proyecto Final de ReactJS de Julián LR
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+La intención de este sitio es simular una cueva online de cambio de divisas, o una parodia de la misma ya que carece de realismo, es muy simple creo yo, son Dolares, Euros, y Yuanes, 3 divisas como base, pero que estan subdivididas en Blue, MEP, CCL, y Crypto, como para darle un twist a la cueva, cada descripción/medio de entrega tiene un poco de carácter para que se distingan de alguna manera entre si también, aparte de la cotización distinta entre las subdivisiones.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+La única librería usada aparte de las vistas en clase es SweetAlert2, que la utilicé para pop ups del flow de compra ya que proveen una manera rápida de taclear problemas de menor relevancia para el scope del proyecto (básicamente mi prioridad es fue invertir el mayor tiempo posible en la funcionalidad del sitio, más que como se ve, pero tampoco queria sacrificar por completo la estética del mismo).
