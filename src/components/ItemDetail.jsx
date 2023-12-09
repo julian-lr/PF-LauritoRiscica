@@ -48,6 +48,7 @@ export const ItemDetail = () => {
       value: currency.valueInARS,
       amount: currentAmount,
       type: currency.type,
+      img: currency.img,
       price: (currency.valueInARS * currentAmount).toFixed(2),
     };
   

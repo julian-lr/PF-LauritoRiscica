@@ -1,48 +1,47 @@
 import React from "react";
 import { useCart } from "../contexts/CartContext";
 import { Badge, OverlayTrigger, Popover } from "react-bootstrap";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 import "../App.css";
 
 export const CartWidget = () => {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
-  const handleEdit = (currencyId) => {
-    // This function will be called when the "Edit" button is clicked
-  };
+  const handleEdit = (currencyId) => (
+    <Link to={`/currencies/${currencyId}`}>
+      <button>Editar</button>
+    </Link>
+  );
 
   const handleRemove = (currencyId) => {
     Swal.fire({
-      title: '¿Estás seguro de eliminar esta orden del carrito?',
-      icon: 'question',
+      title: "¿Estás seguro de eliminar esta orden del carrito?",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No',
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         removeFromCart(currencyId);
-        Swal.fire('Orden eliminada del carrito', '', 'success');
+        Swal.fire("Orden eliminada del carrito", "", "success");
       }
     });
   };
 
   const handleRemoveAll = () => {
     Swal.fire({
-      title: '¿Estás seguro de vaciar tu carrito?',
-      icon: 'question',
+      title: "¿Estás seguro de vaciar tu carrito?",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No',
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         clearCart();
-        Swal.fire('Carrito vaciado', '', 'success');
+        Swal.fire("Carrito vaciado", "", "success");
       }
     });
-  };
-
-  const handleCheckout = () => {
-    // This function will be called when the "Checkout" button is clicked
   };
 
   return (
@@ -59,14 +58,18 @@ export const CartWidget = () => {
                   <div key={currency.id} className="cart-currency">
                     <div className="cart-details">
                       <span className="cart-type">{currency.type}</span>
-                      <span className="cart-amount">Cantidad: ${currency.amount}</span>
-                      <span className="cart-total">Total a pagar: ${currency.price}</span>
+                      <span className="cart-amount">
+                        Cantidad: ${currency.amount}
+                      </span>
+                      <span className="cart-total">
+                        Total a pagar: ${currency.price}
+                      </span>
                     </div>
                     <div className="cart-buttons">
-                      <button onClick={() => handleRemove(currency.id)}>Eliminar</button>
-                      <button onClick={() => handleEdit(currency.id)}>
-                        Editar
+                      <button onClick={() => handleRemove(currency.id)}>
+                        Eliminar
                       </button>
+                      {handleEdit(currency.id)}
                     </div>
                   </div>
                 ))}
@@ -74,11 +77,11 @@ export const CartWidget = () => {
                   <button onClick={handleRemoveAll} className="remove-all-btn">
                     Vaciar Carrito
                   </button>
-                  <button onClick={handleCheckout} className="checkout-btn">
-                    Checkout
-                  </button>
+                  <Link to="/checkout">
+                    <button className="checkout-btn">Checkout</button>
+                  </Link>
                 </div>
-                </>
+              </>
             ) : (
               <p>Tu carrito está vacío</p>
             )}
