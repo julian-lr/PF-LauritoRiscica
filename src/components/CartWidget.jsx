@@ -7,7 +7,6 @@ export const CartWidget = () => {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
   const handleEdit = (index, updatedValue) => {
-    // Implement the logic to edit the selected value in the cart
     // This function will be called when the "Edit" button is clicked
   };
 
@@ -16,9 +15,7 @@ export const CartWidget = () => {
     };
 
   const handleCheckout = () => {
-    // Implement the logic to handle the checkout
     // This function will be called when the "Checkout" button is clicked
-    // You can navigate to another page or show a confirmation modal
   };
 
   return (

@@ -1,4 +1,3 @@
-// ItemDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
@@ -12,11 +11,10 @@ export const ItemDetail = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const selectedCurrency = currencies.find(
-      (currency) => currency.id === Number(id)
-    );
+    const selectedCurrency = currencies.find((currency) => currency.id === Number(id));
     setCurrency(selectedCurrency);
   }, [id]);
+  
 
   if (!currency) return <div>Cargando...</div>;
 
