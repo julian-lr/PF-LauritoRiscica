@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ItemList } from "./ItemList";
-import currenciesData from "../data/currencies.json";
+import hookICL from "../hooks/HookICL";
 import { useParams } from "react-router-dom";
 
 export const ItemListContainer = () => {
-  const [currencies, setCurrencies] = useState([]);
   const { category } = useParams();
+  const { data: currencies, loading, error } = hookICL("items");
 
-  useEffect(() => {
-    // Fetch or manipulate data as needed
-    if (category) {
-      // Filter currencies based on the category
-      const filteredCurrencies = currenciesData.filter(
-        (currency) => currency.category === category
-      );
-      setCurrencies(filteredCurrencies);
-    } else {
-      // If no category is specified, show all currencies
-      setCurrencies(currenciesData);
-    }
-  }, [category]);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-  return <ItemList currencies={currencies} />;
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const filteredCurrencies = category
+    ? currencies.filter((currency) => currency.category === category)
+    : currencies;
+
+  return <ItemList currencies={filteredCurrencies} />;
 };

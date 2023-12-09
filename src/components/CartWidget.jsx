@@ -37,7 +37,7 @@ export const CartWidget = () => {
                     </div>
                     <div className="cart-buttons">
                       <button onClick={() => removeFromCart(index)}>Eliminar</button>
-                      <button onClick={() => handleEdit(index, /* Updated Value */)}>
+                      <button onClick={() => handleEdit(index)}>
                         Editar
                       </button>
                     </div>

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { ItemDetail } from "./ItemDetail";
-import currenciesData from "../data/currencies.json";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { ItemDetail } from './ItemDetail';
+import { useParams } from 'react-router-dom';
+import hookICD from '../hooks/hookICD';
 
 export const ItemDetailContainer = () => {
   const { id } = useParams();
+  const { item, loading, error } = hookICD(id);
 
-  const [currency, setCurrency] = useState(null);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    const selectedCurrency = currenciesData.find((currency) => currency.id === Number(id));
-    setCurrency(selectedCurrency);
-  }, [id]);
+  if (error) {
+    return <div>Error loading item details.</div>;
+  }
 
-  return <ItemDetail currency={currency} />;
+  return <ItemDetail currency={item} />;
 };
