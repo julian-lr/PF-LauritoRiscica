@@ -4,6 +4,7 @@ import { Home } from "./views/Home";
 import { ItemDetailContainer } from "./components/ItemDetailContainer";
 import { ItemListContainer } from "./components/ItemListContainer";
 import { CartProvider } from "./contexts/CartContext";
+import { Error404 } from "./components/Error404";
 
 import "./App.css";
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/currencies/:id" element={<ItemDetailContainer />} />
           <Route path="/category/:category" element={<ItemListContainer />} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

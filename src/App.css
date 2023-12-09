@@ -149,3 +149,30 @@ div.card {
 .cart-actions button {
   margin: 0 5px;
 }
+
+.error {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+  background: linear-gradient(
+        to right,
+        #ffffff 20%,
+        #686868 30%,
+        #bebebe 70%,
+        rgb(87, 87, 87) 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 500% auto;
+  animation: textAnim 5s ease-in-out infinite alternate;
+}
+
+@keyframes textAnim {
+  0% {
+      background-position: 0% 50%;
+  }
+  100% {
+      background-position: 100% 50%;
+  }
+}
