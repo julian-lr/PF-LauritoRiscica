@@ -12,6 +12,7 @@ const cartReducer = (state, action) => {
         updatedCart[existingItemIndex] = {
           ...updatedCart[existingItemIndex],
           amount: action.payload.amount,
+          price: (action.payload.value * action.payload.amount).toFixed(2),
         };
 
         return updatedCart;

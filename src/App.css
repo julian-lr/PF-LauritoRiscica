@@ -243,3 +243,7 @@ form .checkout-final-buttons button {
 .total-to-pay {
   font-size: 1.5rem;
 }
+
+.text-danger {
+  display: block;
+}
