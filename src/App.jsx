@@ -6,6 +6,7 @@ import { ItemListContainer } from "./components/ItemListContainer";
 import { CartProvider } from "./contexts/CartContext";
 import { Error404 } from "./components/Error404";
 import { CheckoutForm } from "./components/CheckoutForm";
+import { OrderCompleted } from "./components/OrderCompleted";
 
 import "./App.css";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/currencies/:id" element={<ItemDetailContainer />} />
           <Route path="/category/:category" element={<ItemListContainer />} />
           <Route path="/checkout" element={<CheckoutForm />} />
+          <Route path="/order-completed/:orderNumber" component={OrderCompleted} />
           <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>

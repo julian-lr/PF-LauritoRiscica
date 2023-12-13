@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { database } from "../firebase/Config";
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 export const CheckoutForm = () => {
+  const navigate = useNavigate();
   const { cart, removeFromCart, clearCart } = useCart();
   const [buyerDetails, setBuyerDetails] = useState({
     name: "",
@@ -15,15 +20,30 @@ export const CheckoutForm = () => {
   });
 
   const [emailsMatch, setEmailsMatch] = useState(true);
+  const [allFieldsCompleted, setAllFieldsCompleted] = useState(false);
 
   useEffect(() => {
-    // Check if emails match
-    setEmailsMatch(buyerDetails.email === buyerDetails.confirmEmail);
-  }, [buyerDetails.email, buyerDetails.confirmEmail]);
+    // Check if emails match exactly
+    const doEmailsMatch = buyerDetails.email === buyerDetails.confirmEmail;
+    setEmailsMatch(doEmailsMatch);
+    
+    // Check if all fields are completed and emails match
+    const areAllFieldsCompleted =
+      buyerDetails.name !== "" &&
+      buyerDetails.lastName !== "" &&
+      buyerDetails.phoneNumber !== "" &&
+      buyerDetails.email !== "" &&
+      buyerDetails.confirmEmail !== "" &&
+      doEmailsMatch; // Use the updated doEmailsMatch value here
+  
+    setAllFieldsCompleted(areAllFieldsCompleted);
+  }, [buyerDetails]);
 
   const handleInputChange = (field, value) => {
     setBuyerDetails({ ...buyerDetails, [field]: value });
   };
+
+  
 
   const handleEdit = (currencyId) => (
     <Link to={`/currencies/${currencyId}`}>
@@ -46,11 +66,78 @@ export const CheckoutForm = () => {
     });
   };
 
-  const handleBuy = () => {
-    // Handle buy logic
-    // clearCart();
-    // Swal.fire('Compra realizada con éxito', '', 'success');
+  const handleBuy = async () => {
+    if (cart.length === 0) {
+      Swal.fire({
+        title: "Carrito vacío",
+        text: "Agrega productos al carrito antes de comprar.",
+        icon: "warning",
+      });
+      return;
+    }
+  
+    // Check if any of the user details are empty
+    if (
+      !buyerDetails.name ||
+      !buyerDetails.lastName ||
+      !buyerDetails.phoneNumber ||
+      !buyerDetails.email ||
+      !buyerDetails.confirmEmail
+    ) {
+      Swal.fire({
+        title: "Campos incompletos",
+        text: "Completa todos los campos antes de comprar.",
+        icon: "warning",
+      });
+      return;
+    }
+  
+    // Check if emails match
+    if (!emailsMatch) {
+      Swal.fire({
+        title: "Correos electrónicos no coinciden",
+        text: "Por favor, verifica que los correos electrónicos coincidan.",
+        icon: "warning",
+      });
+      return;
+    }
+  
+    const orderNumber = `${buyerDetails.name.charAt(0)}${buyerDetails.lastName.charAt(0)}${Math.floor(Math.random() * 10000)}`;
+  
+    const orderData = {
+      timestamp: format(new Date(), 'dd/MM/yy - HH:mm:ss', { locale: es }),
+      buyerName: buyerDetails.name,
+      buyerLastName: buyerDetails.lastName,
+      buyerPhoneNumber: buyerDetails.phoneNumber,
+      buyerEmail: buyerDetails.email,
+      order: cart.map((currency) => ({
+        currencyName: currency.type,
+        currencyId: currency.id,
+        amount: currency.amount,
+        img: currency.img,
+        price: currency.price,
+      })),
+    };
+  
+    try {
+      const docRef = await addDoc(collection(database, "compras"), {
+        orderNumber,
+        ...orderData,
+      });
+      clearCart();
+      navigate(`/order-completed/${orderNumber}`);
+      Swal.fire("Compra realizada con éxito", "", "success");
+    } catch (error) {
+      console.error("Error adding order to Firestore:", error);
+      Swal.fire(
+        "Error en la compra",
+        "Hubo un error al procesar la compra. Por favor, inténtelo de nuevo.",
+        "error"
+      );
+    }
   };
+  
+  
 
   const handleCancel = () => (
     <Link to={`/`}>
@@ -58,10 +145,9 @@ export const CheckoutForm = () => {
     </Link>
   );
 
-  const totalAmountToPay = cart.reduce(
-    (total, currency) => total + parseFloat(currency.price),
-    0
-  ).toFixed(2);
+  const totalAmountToPay = cart
+    .reduce((total, currency) => total + parseFloat(currency.price), 0)
+    .toFixed(2);
 
   return (
     <div className="checkout-page">
@@ -73,8 +159,7 @@ export const CheckoutForm = () => {
                 <img src={currency.img} alt={currency.type} />
               </span>
               <span className="checkout-type">
-                Monto a comprar: ${currency.amount}{" "}
-                {(currency.type).charAt(0).toLowerCase()}{(currency.type).substring(1)}
+                Monto a comprar: ${currency.amount} {currency.type.charAt(0).toLowerCase()}{currency.type.substring(1)}
               </span>
               <span className="checkout-total">
                 Total a pagar: ${currency.price}
@@ -90,7 +175,9 @@ export const CheckoutForm = () => {
         ))}
       </div>
       <div className="total-to-pay">
-        <p>Total a pagar en esta operación: <b>${totalAmountToPay}</b></p>
+        <p>
+          Total a pagar en esta operación: <b>${totalAmountToPay}</b>
+        </p>
       </div>
       <Form>
         <Row className="mb-3">
@@ -122,9 +209,7 @@ export const CheckoutForm = () => {
               type="text"
               placeholder="Ingrese su número de teléfono"
               value={buyerDetails.phoneNumber}
-              onChange={(e) =>
-                handleInputChange("phoneNumber", e.target.value)
-              }
+              onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
             />
           </Form.Group>
 
@@ -146,9 +231,7 @@ export const CheckoutForm = () => {
               type="email"
               placeholder="Confirme su correo electrónico"
               value={buyerDetails.confirmEmail}
-              onChange={(e) =>
-                handleInputChange("confirmEmail", e.target.value)
-              }
+              onChange={(e) => handleInputChange("confirmEmail", e.target.value)}
             />
             {!emailsMatch && (
               <Form.Text className="text-danger">
@@ -158,7 +241,7 @@ export const CheckoutForm = () => {
           </Form.Group>
         </Row>
         <div className="checkout-final-buttons">
-          <Button variant="primary" onClick={handleBuy} disabled={!emailsMatch}>
+          <Button variant="primary" onClick={handleBuy} disabled={!allFieldsCompleted}>
             Comprar
           </Button>
           {handleCancel()}
