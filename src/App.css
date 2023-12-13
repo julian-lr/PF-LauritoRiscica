@@ -247,3 +247,64 @@ form .checkout-final-buttons button {
 .text-danger {
   display: block;
 }
+
+.comprar-cta {
+  display: block;
+}
+
+.payment-cart {
+  width: 100%;
+}
+
+.payment-cart h2 {
+  padding: 0 10%;
+}
+
+.payment-currency {
+  max-height: 100px;
+}
+
+.payment-details {
+  border: 1px solid black;
+  width: 50%;
+  margin: 0 25%;
+  height: 48px;
+  padding: 15px;
+}
+
+.payment-img img {
+  height: 48px;
+  float: left;
+}
+
+.payment-divtt {
+  float: right;
+  text-align: right;
+}
+
+.payment-type, .payment-total {
+  display: block;
+}
+
+.cc-info {
+  padding: 20px 10px
+}
+
+.cc-info p {
+  padding-top: 10px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.cardnumber-style {
+  padding-top: 5px;
+}
+
+.payment-div-comprar-cta {
+  text-align: center;
+  width: 100%;
+}
+
+.payment-comprar-cta {
+  margin: 10px 0 0 0;
+}

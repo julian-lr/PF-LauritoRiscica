@@ -20,7 +20,7 @@ function App() {
           <Route path="/currencies/:id" element={<ItemDetailContainer />} />
           <Route path="/category/:category" element={<ItemListContainer />} />
           <Route path="/checkout" element={<CheckoutForm />} />
-          <Route path="/order-completed/:orderNumber" component={OrderCompleted} />
+          <Route path="/order-completed/:orderNumber" element={<OrderCompleted />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>

@@ -3,8 +3,7 @@ import { useCart } from "../contexts/CartContext";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { database } from "../firebase/Config";
+import { doc, setDoc } from "firebase/firestore";import { database } from "../firebase/Config";
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -23,18 +22,16 @@ export const CheckoutForm = () => {
   const [allFieldsCompleted, setAllFieldsCompleted] = useState(false);
 
   useEffect(() => {
-    // Check if emails match exactly
     const doEmailsMatch = buyerDetails.email === buyerDetails.confirmEmail;
     setEmailsMatch(doEmailsMatch);
     
-    // Check if all fields are completed and emails match
     const areAllFieldsCompleted =
       buyerDetails.name !== "" &&
       buyerDetails.lastName !== "" &&
       buyerDetails.phoneNumber !== "" &&
       buyerDetails.email !== "" &&
       buyerDetails.confirmEmail !== "" &&
-      doEmailsMatch; // Use the updated doEmailsMatch value here
+      doEmailsMatch;
   
     setAllFieldsCompleted(areAllFieldsCompleted);
   }, [buyerDetails]);
@@ -76,7 +73,6 @@ export const CheckoutForm = () => {
       return;
     }
   
-    // Check if any of the user details are empty
     if (
       !buyerDetails.name ||
       !buyerDetails.lastName ||
@@ -92,7 +88,6 @@ export const CheckoutForm = () => {
       return;
     }
   
-    // Check if emails match
     if (!emailsMatch) {
       Swal.fire({
         title: "Correos electrónicos no coinciden",
@@ -120,10 +115,8 @@ export const CheckoutForm = () => {
     };
   
     try {
-      const docRef = await addDoc(collection(database, "compras"), {
-        orderNumber,
-        ...orderData,
-      });
+      const orderDocRef = doc(database, "compras", orderNumber);
+      await setDoc(orderDocRef, orderData);
       clearCart();
       navigate(`/order-completed/${orderNumber}`);
       Swal.fire("Compra realizada con éxito", "", "success");
@@ -242,7 +235,7 @@ export const CheckoutForm = () => {
         </Row>
         <div className="checkout-final-buttons">
           <Button variant="primary" onClick={handleBuy} disabled={!allFieldsCompleted}>
-            Comprar
+            Iniciar orden
           </Button>
           {handleCancel()}
         </div>
