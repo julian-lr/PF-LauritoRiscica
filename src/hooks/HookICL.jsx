@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { database } from "../firebase/Config";
 
-const hookICL = (collectionName) => {
+const hookICL = (items) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Change here, initialize error state as null
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const collectionRef = collection(database, collectionName);
+        const collectionRef = collection(database, "items");
         const snapshot = await getDocs(collectionRef);
 
         setData(
@@ -18,16 +18,16 @@ const hookICL = (collectionName) => {
             .map((doc) => ({ ...doc.data(), id: doc.data().id || doc.id }))
             .sort((a, b) => a.id - b.id)
         );
-        setError(null); // Change here, reset error state on successful fetch
+        setError(snapshot.empty);
       } catch (error) {
-        setError(error.message); // Change here, set the error state with the error message
+        setError(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [collectionName]);
+  }, [items]);
 
   return { data, loading, error };
 };
