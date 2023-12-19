@@ -2,22 +2,28 @@ import React, { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import { useParams } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
-import currencies from "../data/currencies.json";
+import hookICD from "../hooks/hookICD";
 
 export const ItemDetail = () => {
   const { cart, addToCart } = useCart();
-  const [currency, setCurrency] = useState(null);
   const [currentAmount, setCurrentAmount] = useState(5);
-
   const { id } = useParams();
+  const { item: currency, loading, error } = hookICD(id);
 
   useEffect(() => {
-    const selectedCurrency = currencies.find((currency) => currency.id === Number(id));
-    setCurrency(selectedCurrency);
-  }, [id]);
-  
+    // Ensure the currency is loaded before setting the current currency
+    if (!loading && !error) {
+      setCurrentAmount(0); // Reset currentAmount when currency changes
+    }
+  }, [loading, error, id]);
 
-  if (!currency) return <div>Cargando...</div>;
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error || !currency) {
+    return <div>Error cargando la divisa</div>;
+  }
 
   const handleAmountButtonClick = (amount) => {
     setCurrentAmount(amount);
@@ -42,7 +48,7 @@ export const ItemDetail = () => {
       });
       return;
     }
-  
+
     const newPurchase = {
       id: currency.id,
       value: currency.valueInARS,
@@ -51,9 +57,9 @@ export const ItemDetail = () => {
       img: currency.img,
       price: (currency.valueInARS * currentAmount).toFixed(2),
     };
-  
+
     const existingOrder = cart.find((order) => order.id === currency.id);
-  
+
     if (existingOrder) {
       Swal.fire({
         title: `Ya tenés una orden de ${existingOrder.amount} ${(currency.type).toLowerCase()} en tu carrito.`,
@@ -75,8 +81,6 @@ export const ItemDetail = () => {
       Swal.fire('Orden añadida al carrito!', '', 'success');
     }
   };
-  
-
 
   return (
     <main>
