@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import { useParams } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
-import hookICD from "../hooks/hookICD";
+import hookICD from "../hooks/HookICD";
 
 export const ItemDetail = () => {
   const { cart, addToCart } = useCart();

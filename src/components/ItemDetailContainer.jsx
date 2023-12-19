@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ItemDetail } from './ItemDetail';
 import { useParams } from 'react-router-dom';
-import hookICD from '../hooks/hookICD';
+import hookICD from '../hooks/HookICD';
 import { Error404 } from './Error404';
 
 export const ItemDetailContainer = () => {
