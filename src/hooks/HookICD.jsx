@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, where, query } from 'firebase/firestore';
-import { database } from '../firebase/Config';
+import { database } from '../firebasecfg/Config';
 
 const hookICD = (itemId) => {
   const [item, setItem] = useState(null);

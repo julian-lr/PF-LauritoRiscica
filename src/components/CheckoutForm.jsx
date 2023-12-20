@@ -4,7 +4,7 @@ import { Form, Button, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
-import { database } from "../firebase/Config";
+import { database } from "../firebasecfg/Config";
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 

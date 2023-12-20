@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { database } from "../firebase/Config";
+import { database } from "../firebasecfg/Config";
 
 const hookICL = (items) => {
   const [data, setData] = useState([]);
