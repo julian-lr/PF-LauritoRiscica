@@ -11,9 +11,8 @@ export const ItemDetail = () => {
   const { item: currency, loading, error } = hookICD(id);
 
   useEffect(() => {
-    // Ensure the currency is loaded before setting the current currency
     if (!loading && !error) {
-      setCurrentAmount(0); // Reset currentAmount when currency changes
+      setCurrentAmount(0);
     }
   }, [loading, error, id]);
 

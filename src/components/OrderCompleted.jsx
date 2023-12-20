@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { database } from "../firebase/Config.jsx";
+import { database } from "../firebase/Config";
 import { useCart } from "../contexts/CartContext";
 import Swal from "sweetalert2";
 
