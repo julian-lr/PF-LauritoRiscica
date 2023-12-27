@@ -3,7 +3,7 @@ import { useCart } from "../contexts/CartContext";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, writeBatch, increment, addDoc, collection } from 'firebase/firestore';
 import { database } from "../firebasecfg/Config";
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -41,8 +41,6 @@ export const CheckoutForm = () => {
     setBuyerDetails({ ...buyerDetails, [field]: value });
   };
 
-  
-
   const handleEdit = (currencyId) => (
     <Link to={`/currencies/${currencyId}`}>
       <button>Editar</button>
@@ -64,6 +62,30 @@ export const CheckoutForm = () => {
     });
   };
 
+  const updateStockInFirestore = async () => {
+    const batch = writeBatch(database);
+  
+    cart.forEach(item => {
+      if (typeof item.amount !== 'number' || isNaN(item.amount)) {
+        console.error(`Cantidad para ${item.id} no es un numero: `, item.amount);
+        return;
+      }
+  
+      const itemRef = doc(database, "items", item.id);
+      batch.update(itemRef, { stock: increment(-item.amount) });
+    });
+  
+    try {
+      await batch.commit();
+      console.log("Stock updateado");
+    } catch (error) {
+      console.error("Error updateando stock: ", error);
+    }
+  };
+  
+  
+  
+
   const handleBuy = async () => {
     if (cart.length === 0) {
       Swal.fire({
@@ -74,13 +96,11 @@ export const CheckoutForm = () => {
       return;
     }
   
-    if (
-      !buyerDetails.name ||
-      !buyerDetails.lastName ||
-      !buyerDetails.phoneNumber ||
-      !buyerDetails.email ||
-      !buyerDetails.confirmEmail
-    ) {
+    if (!buyerDetails.name ||
+        !buyerDetails.lastName ||
+        !buyerDetails.phoneNumber ||
+        !buyerDetails.email ||
+        !buyerDetails.confirmEmail) {
       Swal.fire({
         title: "Campos incompletos",
         text: "Completa todos los campos antes de comprar.",
@@ -98,8 +118,6 @@ export const CheckoutForm = () => {
       return;
     }
   
-    const orderNumber = `${buyerDetails.name.charAt(0)}${buyerDetails.lastName.charAt(0)}${Math.floor(Math.random() * 10000)}`;
-  
     const orderData = {
       timestamp: format(new Date(), 'dd/MM/yy - HH:mm:ss', { locale: es }),
       buyerName: buyerDetails.name,
@@ -116,10 +134,12 @@ export const CheckoutForm = () => {
     };
   
     try {
-      const orderDocRef = doc(database, "compras", orderNumber);
-      await setDoc(orderDocRef, orderData);
+      const orderDocRef = await addDoc(collection(database, "compras"), orderData);
+      const orderId = orderDocRef.id;
+
+      await updateStockInFirestore();
       clearCart();
-      navigate(`/order-completed/${orderNumber}`);
+      navigate(`/order-completed/${orderId}`);
       Swal.fire("Compra realizada con éxito", "", "success");
     } catch (error) {
       console.error("Error adding order to Firestore:", error);
@@ -130,14 +150,6 @@ export const CheckoutForm = () => {
       );
     }
   };
-  
-  
-
-  const handleCancel = () => (
-    <Link to={`/`}>
-      <button>Cancelar</button>
-    </Link>
-  );
 
   const totalAmountToPay = cart
     .reduce((total, currency) => total + parseFloat(currency.price), 0)
@@ -238,9 +250,13 @@ export const CheckoutForm = () => {
           <Button variant="primary" onClick={handleBuy} disabled={!allFieldsCompleted}>
             Iniciar orden
           </Button>
-          {handleCancel()}
+          <Link to={`/`}>
+            <button>Cancelar</button>
+          </Link>
         </div>
       </Form>
     </div>
   );
 };
+
+export default CheckoutForm;

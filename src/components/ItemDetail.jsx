@@ -48,6 +48,11 @@ export const ItemDetail = () => {
       return;
     }
 
+    if (currentAmount > currency.stock) {
+      Swal.fire("Error", "You cannot add more than the available stock.", "error");
+      return;
+    }
+
     const newPurchase = {
       id: currency.id,
       value: currency.valueInARS,
@@ -89,6 +94,7 @@ export const ItemDetail = () => {
         <img width={150} src={currency.img} alt={currency.type} />
         <p>Actualmente cotiza ${currency.valueInARS}</p>
         <p>Plazo de entrega: {currency.delivery}</p>
+        <p>Stock: ${currency.stock.toLocaleString('es-AR')}</p>
         <p>{currency.description}</p>
       </div>
       <div className="adjust-amount-buttons">

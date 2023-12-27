@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc } from "firebase/firestore";
 import { database } from "../firebasecfg/Config";
 import { useCart } from "../contexts/CartContext";
 import Swal from "sweetalert2";
@@ -39,7 +39,7 @@ export const OrderCompleted = () => {
     }
 
     const paymentDocRef = doc(database, "pagos", orderNumber);
-    await setDoc(paymentDocRef, {
+    await addDoc(paymentDocRef, {
       cardNumber: paymentDetails.cardNumber.slice(-4),
       cardName: paymentDetails.cardName,
       cardCVC: paymentDetails.cardCVC,
