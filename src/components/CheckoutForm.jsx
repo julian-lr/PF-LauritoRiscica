@@ -3,10 +3,17 @@ import { useCart } from "../contexts/CartContext";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import { getFirestore, doc, writeBatch, increment, addDoc, collection } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  writeBatch,
+  increment,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 import { database } from "../firebasecfg/Config";
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export const CheckoutForm = () => {
   const navigate = useNavigate();
@@ -25,7 +32,7 @@ export const CheckoutForm = () => {
   useEffect(() => {
     const doEmailsMatch = buyerDetails.email === buyerDetails.confirmEmail;
     setEmailsMatch(doEmailsMatch);
-    
+
     const areAllFieldsCompleted =
       buyerDetails.name !== "" &&
       buyerDetails.lastName !== "" &&
@@ -33,7 +40,7 @@ export const CheckoutForm = () => {
       buyerDetails.email !== "" &&
       buyerDetails.confirmEmail !== "" &&
       doEmailsMatch;
-  
+
     setAllFieldsCompleted(areAllFieldsCompleted);
   }, [buyerDetails]);
 
@@ -64,17 +71,25 @@ export const CheckoutForm = () => {
 
   const updateStockInFirestore = async () => {
     const batch = writeBatch(database);
-  
-    cart.forEach(item => {
-      if (typeof item.amount !== 'number' || isNaN(item.amount)) {
-        console.error(`Cantidad para ${item.id} no es un numero: `, item.amount);
+
+    cart.forEach((item) => {
+      if (typeof item.amount !== "number" || isNaN(item.amount)) {
+        console.error(
+          `Cantidad para ${item.id} no es un numero: `,
+          item.amount
+        );
         return;
       }
-  
-      const itemRef = doc(database, "items", item.id);
+
+      if (!item.dbId) {
+        console.error(`No dbId found for item with id ${item.id}`);
+        return;
+      }
+
+      const itemRef = doc(database, "items", item.dbId);
       batch.update(itemRef, { stock: increment(-item.amount) });
     });
-  
+
     try {
       await batch.commit();
       console.log("Stock updateado");
@@ -82,9 +97,6 @@ export const CheckoutForm = () => {
       console.error("Error updateando stock: ", error);
     }
   };
-  
-  
-  
 
   const handleBuy = async () => {
     if (cart.length === 0) {
@@ -95,12 +107,14 @@ export const CheckoutForm = () => {
       });
       return;
     }
-  
-    if (!buyerDetails.name ||
-        !buyerDetails.lastName ||
-        !buyerDetails.phoneNumber ||
-        !buyerDetails.email ||
-        !buyerDetails.confirmEmail) {
+
+    if (
+      !buyerDetails.name ||
+      !buyerDetails.lastName ||
+      !buyerDetails.phoneNumber ||
+      !buyerDetails.email ||
+      !buyerDetails.confirmEmail
+    ) {
       Swal.fire({
         title: "Campos incompletos",
         text: "Completa todos los campos antes de comprar.",
@@ -108,7 +122,7 @@ export const CheckoutForm = () => {
       });
       return;
     }
-  
+
     if (!emailsMatch) {
       Swal.fire({
         title: "Correos electrónicos no coinciden",
@@ -117,9 +131,9 @@ export const CheckoutForm = () => {
       });
       return;
     }
-  
+
     const orderData = {
-      timestamp: format(new Date(), 'dd/MM/yy - HH:mm:ss', { locale: es }),
+      timestamp: format(new Date(), "dd/MM/yy - HH:mm:ss", { locale: es }),
       buyerName: buyerDetails.name,
       buyerLastName: buyerDetails.lastName,
       buyerPhoneNumber: buyerDetails.phoneNumber,
@@ -132,9 +146,12 @@ export const CheckoutForm = () => {
         price: currency.price,
       })),
     };
-  
+
     try {
-      const orderDocRef = await addDoc(collection(database, "compras"), orderData);
+      const orderDocRef = await addDoc(
+        collection(database, "compras"),
+        orderData
+      );
       const orderId = orderDocRef.id;
 
       await updateStockInFirestore();
@@ -165,7 +182,9 @@ export const CheckoutForm = () => {
                 <img src={currency.img} alt={currency.type} />
               </span>
               <span className="checkout-type">
-                Monto a comprar: ${currency.amount} {currency.type.charAt(0).toLowerCase()}{currency.type.substring(1)}
+                Monto a comprar: ${currency.amount}{" "}
+                {currency.type.charAt(0).toLowerCase()}
+                {currency.type.substring(1)}
               </span>
               <span className="checkout-total">
                 Total a pagar: ${currency.price}
@@ -237,7 +256,9 @@ export const CheckoutForm = () => {
               type="email"
               placeholder="Confirme su correo electrónico"
               value={buyerDetails.confirmEmail}
-              onChange={(e) => handleInputChange("confirmEmail", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("confirmEmail", e.target.value)
+              }
             />
             {!emailsMatch && (
               <Form.Text className="text-danger">
@@ -247,7 +268,11 @@ export const CheckoutForm = () => {
           </Form.Group>
         </Row>
         <div className="checkout-final-buttons">
-          <Button variant="primary" onClick={handleBuy} disabled={!allFieldsCompleted}>
+          <Button
+            variant="primary"
+            onClick={handleBuy}
+            disabled={!allFieldsCompleted}
+          >
             Iniciar orden
           </Button>
           <Link to={`/`}>

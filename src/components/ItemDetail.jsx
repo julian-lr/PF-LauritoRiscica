@@ -49,12 +49,13 @@ export const ItemDetail = () => {
     }
 
     if (currentAmount > currency.stock) {
-      Swal.fire("Error", "You cannot add more than the available stock.", "error");
+      Swal.fire("Error", "No podés ordenar más de lo que hay en stock.", "error");
       return;
     }
 
     const newPurchase = {
       id: currency.id,
+      dbId: currency.dbId,
       value: currency.valueInARS,
       amount: currentAmount,
       type: currency.type,

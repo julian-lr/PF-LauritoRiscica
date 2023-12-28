@@ -17,7 +17,7 @@ const cartReducer = (state, action) => {
 
         return updatedCart;
       } else {
-        return [...state, action.payload];
+        return [...state, { ...action.payload, dbId: action.payload.dbId }];
       }
 
     case 'REMOVE_FROM_CART':

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, addDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection } from "firebase/firestore";
 import { database } from "../firebasecfg/Config";
 import { useCart } from "../contexts/CartContext";
 import Swal from "sweetalert2";
@@ -38,22 +38,25 @@ export const OrderCompleted = () => {
       return;
     }
 
-    const paymentDocRef = doc(database, "pagos", orderNumber);
-    await addDoc(paymentDocRef, {
-      cardNumber: paymentDetails.cardNumber.slice(-4),
-      cardName: paymentDetails.cardName,
-      cardCVC: paymentDetails.cardCVC,
-      cardExpiry: paymentDetails.cardExpiry,
-      payed: true,
-    });
+    try {
+      const paymentDocRef = await addDoc(collection(database, "pagos"), {
+        cardNumber: paymentDetails.cardNumber.slice(-4),
+        cardName: paymentDetails.cardName,
+        cardCVC: paymentDetails.cardCVC,
+        cardExpiry: paymentDetails.cardExpiry,
+        payed: true,
+      });
 
-    Swal.fire({
-      title: "Pago exitoso",
-      text: "¡Gracias por tu compra!",
-      icon: "success",
-    }).then(() => {
+      Swal.fire({
+        title: "¡Gracias por tu compra!",
+        text: `Tu número de transacción es: ${paymentDocRef.id}`,
+        icon: "success",
+      }).then(() => {
         window.location.href = "/";
       });
+    } catch (error) {
+      console.error("Error processing payment:", error);
+    }
   };
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export const OrderCompleted = () => {
   return (
     <div>
       <h1>Orden realizada</h1>
-      <p>Tu ID de orden es: {orderNumber}</p>
+      <b>Tu ID de orden es: {orderNumber}</b>
       {loading ? (
         <p>Cargando...</p>
       ) : (
