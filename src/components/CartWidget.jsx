@@ -7,6 +7,7 @@ import "../App.css";
 
 export const CartWidget = () => {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
+  const totalAmount = cart.reduce((total, currency) => total + currency.amount, 0);
 
   const handleEdit = (customId) => (
     <Link to={`/currencies/${customId}`}>
@@ -97,7 +98,7 @@ export const CartWidget = () => {
             width="24px"
           />
           <Badge pill bg="danger" className="currency-count">
-            {cart.length}
+            {totalAmount}
           </Badge>
         </div>
       </div>
