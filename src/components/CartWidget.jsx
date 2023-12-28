@@ -8,8 +8,8 @@ import "../App.css";
 export const CartWidget = () => {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
-  const handleEdit = (currencyId) => (
-    <Link to={`/currencies/${currencyId}`}>
+  const handleEdit = (customId) => (
+    <Link to={`/currencies/${customId}`}>
       <button>Editar</button>
     </Link>
   );

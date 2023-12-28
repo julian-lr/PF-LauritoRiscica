@@ -15,7 +15,7 @@ const hookICD = (itemId) => {
         const snapshot = await getDocs(itemQuery);
 
         if (snapshot.docs.length > 0) {
-          setItem({ ...snapshot.docs[0].data(), id: snapshot.docs[0].id });
+          setItem({ ...snapshot.docs[0].data(), id: snapshot.docs[0].data().id || snapshot.docs[0].id });
           setError(false);
         } else {
           setError(true);
